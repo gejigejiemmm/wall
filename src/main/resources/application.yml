@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://112.74.58.0:3306/wall?serverTimezone=Asia/Shanghai&useUnicode=yes&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/wall?serverTimezone=Asia/Shanghai&useUnicode=yes
     username: root
-    password: huyihan
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       query-timeout: 2400
@@ -34,6 +34,9 @@ spring:
       useGlobalDataSourceStat: true
       #  通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      connection-init-sqls: set names utf8mb4
+    hikari:
+      connection-init-sql: SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci
   thymeleaf:
     cache: false #清理缓存，使用热部署
     prefix: classpath:/templates/ #扫描 静态资源的路径
