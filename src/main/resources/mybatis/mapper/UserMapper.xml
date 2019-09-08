@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+uId;
+sex;
+avataUrl
+String nickName;
+String username;
+String password;-->
+<mapper namespace="cn.edu.zzuli.wall.mapper.UserMapper">
+
+    <resultMap id="user" type="cn.edu.zzuli.wall.bean.User">
+        <id property="uId" column="uId"></id>
+        <result property="sex" column="sex"></result>
+        <result property="avataUrl" column="avataUrl"></result>
+        <result property="nickName" column="nickName"></result>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+    </resultMap>
+    
+    <sql id="getUser">
+        SELECT * FROM `user`
+        <where>
+            <if test="_parameter.containsKey('uId') and uId != null">
+                uId = #{uId}
+            </if>
+            <if test="_parameter.containsKey('username') and username != null">
+                username = #{username}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--    public User getUserByName(@Param("username") String username);-->
+    <select id="getUserByName" parameterType="java.lang.String" resultMap="user">
+        <include refid="getUser"></include>
+    </select>
+
+    <!--    public User getUserByUId(@Param("uId")Integer uId);-->
+    <select id="getUserByUId" parameterType="int" resultMap="user">
+        <include refid="getUser"></include>
+    </select>
+
+    <!--    public boolean addUser(User user);-->
+    <insert id="addUser" parameterType="cn.edu.zzuli.wall.bean.User" useGeneratedKeys="true"
+            keyProperty="uId" keyColumn="uId">
+        INSERT INTO `user`(sex,avataUrl,nickName,username,`password`)
+        VALUES(#{sex},#{avataUrl},#{nickName},#{username},#{password})
+    </insert>
+</mapper>

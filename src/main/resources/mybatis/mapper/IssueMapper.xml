@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--    private Integer isId;
+    private String imgsUrl;
+    private Integer fromId;
+    private LocalDateTime date;
+    private String content;
+    private Integer like;
+    private Integer share;-->
+<mapper namespace="cn.edu.zzuli.wall.mapper.IssueMapper">
+
+    <resultMap id="issue" type="cn.edu.zzuli.wall.bean.Issue">
+        <id property="isId" column="isId"></id>
+        <result property="imgsUrl" column="imgsUrl"></result>
+        <result property="fromId" column="fromId"></result>
+        <result property="date" column="date"></result>
+        <result property="content" column="content"></result>
+        <result property="like" column="like"></result>
+        <result property="share" column="share"></result>
+        <association property="user" >
+            <id property="uId" column="uId"></id>
+            <result property="sex" column="sex"></result>
+            <result property="avataUrl" column="avataUrl"></result>
+            <result property="nickName" column="nickName"></result>
+            <result property="username" column="username"></result>
+        </association>
+    </resultMap>
+
+    <!--   public List<Issue> getAllIssues(); -->
+    <select id="getAllIssues" resultMap="issue">
+        SELECT * FROM issue i
+        JOIN `user` u
+        ON i.fromId = u.uId
+        ORDER BY i.date DESC
+    </select>
+
+    <!--    public boolean addIssue(@Param("content")String content, @Param("date")LocalDateTime date,
+                            @Param("fromId")Integer fromId,@Param("imgsUrl")String imgsUrl);-->
+    <insert id="addIssue" useGeneratedKeys="true" keyProperty="isId" keyColumn="isId">
+        INSERT INTO
+        issue(imgsUrl,fromId,date,content)
+        VALUES(#{imgsUrl},#{fromId},#{date},#{content})
+    </insert>
+
+
+
+    <!--    public boolean tags(@Param("isId") Integer isId);-->
+    <update id="tags" parameterType="int">
+        UPDATE issue SET
+        `like` = `like` + 1
+        WHERE isId = #{isId}
+    </update>
+<!--    public boolean share(Integer isId);-->
+    <update id="share" parameterType="int">
+        UPDATE issue SET
+        `share` = `share` + 1
+        WHERE isId = #{isId}
+    </update>
+
+    <!--    public Issue getIssueBYIsId(Integer isId);-->
+    <select id="getIssueBYIsId" parameterType="int" resultMap="issue">
+        SELECT
+        imgsUrl,date,fromId,content,`share`,
+        nickName,avataUrl
+        FROM issue
+        JOIN `user` on fromId = uid
+        WHERE isId = #{isId}
+    </select>
+
+</mapper>

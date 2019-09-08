@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+private Integer cId;
+    private String content;
+    private String imgurl;
+    private Integer like;
+    private Integer fromId;//用户id
+    private Integer toIsId;//回复的动态id
+    private LocalDateTime date;
+    -->
+<mapper namespace="cn.edu.zzuli.wall.mapper.CommentMapper">
+
+
+    <resultMap id="comment" type="cn.edu.zzuli.wall.bean.Comment">
+        <id property="cId" column="cId"></id>
+        <result property="content" column="content"></result>
+        <result property="imgurl" column="imgurl"></result>
+        <result property="like" column="like"></result>
+        <result property="fromId" column="fromId"></result>
+        <result property="toIsId" column="toIsId"></result>
+        <result property="date" column="date"></result>
+        <association property="user" >
+            <id property="uId" column="uId"></id>
+            <result property="sex" column="sex"></result>
+            <result property="avataUrl" column="avataUrl"></result>
+            <result property="nickName" column="nickName"></result>
+            <result property="username" column="username"></result>
+        </association>
+    </resultMap>
+
+    <!--    public Comment getCommentByIsId(Integer isId);-->
+    <select id="getCommentByIsId" parameterType="int" resultMap="comment">
+        SELECT cId,content,imgurl ,date,
+        avataUrl,nickName,uId,c.`like`
+        FROM `comment` c
+        JOIN `user` u ON
+        u.uId = c.fromId
+        WHERE c.toIsId = #{isId}
+        ORDER BY c.`like`DESC, c.date
+    </select>
+
+</mapper>
