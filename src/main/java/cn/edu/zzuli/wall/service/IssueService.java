@@ -26,11 +26,17 @@ public class IssueService {
 
     /**
      * 获取全部的动态信息，包括发布的用户的信息
+     * @param p 页数
+     * @param uId 加入该参数则为 查找特定的 用户动态
      * @return
      */
-    public PageInfo getAllIssues(Integer p){
+    public PageInfo getAllIssues(Integer p,Integer uId){
+        HashMap<String,Object> issuesInfo = new HashMap<>();
+        if(uId != null){
+            issuesInfo.put("uId",uId);
+        }
         PageHelper.startPage(p,5);
-        List<Issue> issues = issueMapper.getAllIssues();
+        List<Issue> issues = issueMapper.getAllIssues(issuesInfo);
         PageInfo info = new PageInfo(issues);
         return info;
     }

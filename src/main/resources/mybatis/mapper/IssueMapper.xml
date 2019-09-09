@@ -27,13 +27,26 @@
             <result property="username" column="username"></result>
         </association>
     </resultMap>
-
-    <!--   public List<Issue> getAllIssues(); -->
-    <select id="getAllIssues" resultMap="issue">
+    <sql id="getIssues">
         SELECT * FROM issue i
         JOIN `user` u
         ON i.fromId = u.uId
+        <where>
+            <if test="uId != null">
+                i.fromId = #{uId}
+            </if>
+        </where>
         ORDER BY i.date DESC
+    </sql>
+
+    <!--   public List<Issue> getAllIssues(); -->
+    <select id="getAllIssues" resultMap="issue">
+        <include refid="getIssues"></include>
+    </select>
+
+    <!--    public List<Issue> getUserAllIssues(Integer uId);-->
+    <select id="getUserAllIssues" resultMap="issue">
+        <include refid="getIssues"></include>
     </select>
 
     <!--    public boolean addIssue(@Param("content")String content, @Param("date")LocalDateTime date,
@@ -43,7 +56,6 @@
         issue(imgsUrl,fromId,date,content)
         VALUES(#{imgsUrl},#{fromId},#{date},#{content})
     </insert>
-
 
 
     <!--    public boolean tags(@Param("isId") Integer isId);-->
@@ -62,7 +74,7 @@
     <!--    public Issue getIssueBYIsId(Integer isId);-->
     <select id="getIssueBYIsId" parameterType="int" resultMap="issue">
         SELECT
-        imgsUrl,date,fromId,content,`share`,
+        imgsUrl,date,fromId,content,`like`,`share`,
         nickName,avataUrl
         FROM issue
         JOIN `user` on fromId = uid

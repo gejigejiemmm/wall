@@ -5,10 +5,13 @@ import cn.edu.zzuli.wall.mapper.UserMapper;
 import cn.edu.zzuli.wall.utils.BaseUtils;
 import cn.edu.zzuli.wall.utils.OSSClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -18,6 +21,35 @@ public class UserService {
 
     @Autowired
     private OSSClientUtil ossClientUtil;
+
+    /**
+     * 获取当前用户点赞数
+     * @param uId
+     * @return
+     */
+    public HashMap<Integer,Integer> getLikes(Integer uId){
+        if(uId != null){
+           return userMapper.initUserInfo(uId);
+        }
+        return null;
+    }
+
+    /**
+     * 关注用户
+     * @param fromId
+     * @param followUId
+     * @return
+     */
+    public boolean follow(Integer fromId,Integer followUId){
+        if(followUId == null || fromId == null)
+            return false;
+        try {
+            userMapper.follow(fromId,followUId);
+        }catch (DataAccessException d){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 通过名字获取用户信息

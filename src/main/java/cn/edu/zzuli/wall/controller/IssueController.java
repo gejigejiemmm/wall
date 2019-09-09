@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -29,8 +30,8 @@ public class IssueController {
     @ApiOperation(value = "获取所有的动态", httpMethod = "GET")
     @RequestMapping("/getAll")
     @ResponseBody
-    public PageInfo getAllIssues(Integer p){
-        return issueService.getAllIssues(p);
+    public PageInfo getAllIssues(Integer p,@RequestParam(value = "uId",required = false) Integer uId){
+        return issueService.getAllIssues(p,uId);
     }
 
     @ApiOperation(value = "发布动态", httpMethod = "POST")

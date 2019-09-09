@@ -49,4 +49,24 @@ String password;-->
         INSERT INTO `user`(sex,avataUrl,nickName,username,`password`)
         VALUES(#{sex},#{avataUrl},#{nickName},#{username},#{password})
     </insert>
+
+    <!--    public boolean follow(@Param("fromId")Integer fromId,Integer followUId);-->
+    <insert id="follow">
+        INSERT INTO followU(fromId,followUId) VALUES(#{fromId},#{followUId})
+    </insert>
+
+    <!--    public Integer getLikes(Integer uId);-->
+    <select id="initUserInfo" resultType="java.util.HashMap">
+        SELECT
+        sum( `like` ) likes,
+        ( SELECT count( f.fId ) FROM `user` u JOIN followU f ON f.followUId = u.uId WHERE uid = #{uId}) fans,
+        ( SELECT count( f.fId ) FROM `user` u JOIN followU f ON f.fromId = u.uId WHERE uid = #{uId}) follows
+        FROM
+            issue i
+            JOIN `user` u ON u.uId = i.fromId
+        WHERE
+            i.fromId = #{uId}
+    </select>
+
+
 </mapper>
