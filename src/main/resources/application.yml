@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wall?serverTimezone=Asia/Shanghai&useUnicode=yes
+    url: jdbc:mysql://112.74.58.0:3306/wall?serverTimezone=Asia/Shanghai&useUnicode=yes
     username: root
-    password: 123456
+    password: huyihan
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       query-timeout: 2400
@@ -42,7 +42,6 @@ spring:
     prefix: classpath:/templates/ #扫描 静态资源的路径
 server:
   port: 80
-
 
 mybatis:
   mapper-locations:
