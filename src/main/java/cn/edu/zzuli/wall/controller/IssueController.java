@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @Api(tags = "发布动态相关文档")
 @RequestMapping("/issue")
 public class IssueController {
@@ -29,13 +30,11 @@ public class IssueController {
 
     @ApiOperation(value = "获取所有的动态", httpMethod = "GET")
     @RequestMapping("/getAll")
-    @ResponseBody
     public PageInfo getAllIssues(Integer p,@RequestParam(value = "uId",required = false) Integer uId){
         return issueService.getAllIssues(p,uId);
     }
 
     @ApiOperation(value = "发布动态", httpMethod = "POST")
-    @ResponseBody
     @RequestMapping("/add")
     public Msg addIssue(Issue issue){
         issue = issueService.addIssue(issue);
@@ -46,7 +45,6 @@ public class IssueController {
 
     @ApiOperation(value = "动态的转发", httpMethod = "POST")
     @RequestMapping("/forward")
-    @ResponseBody
     public Msg forward(Integer isId, @ApiIgnore() HttpSession session){
         Map<String,Issue> issueMap = issueService.forward(isId,session);
         if(issueMap != null && issueMap.containsKey("oldIssue") && issueMap.containsKey("newIssue"))
@@ -56,7 +54,6 @@ public class IssueController {
 
     @ApiOperation(value = "点赞数 + 1",httpMethod = "POST")
     @RequestMapping("/tags")
-    @ResponseBody
     public Msg tags(Integer isId){
         if(issueService.Tags(isId)){
             return Msg.success();
