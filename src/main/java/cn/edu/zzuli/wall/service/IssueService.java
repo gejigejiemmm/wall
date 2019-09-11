@@ -30,10 +30,13 @@ public class IssueService {
      * @param uId 加入该参数则为 查找特定的 用户动态
      * @return
      */
-    public PageInfo getAllIssues(Integer p,Integer uId){
+    public PageInfo getAllIssues(Integer p,Integer uId,Integer ccId){
         HashMap<String,Object> issuesInfo = new HashMap<>();
         if(uId != null){
             issuesInfo.put("uId",uId);
+        }
+        if(ccId != null){
+            issuesInfo.put("ccId",ccId);
         }
         PageHelper.startPage(p,5);
         List<Issue> issues = issueMapper.getAllIssues(issuesInfo);

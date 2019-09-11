@@ -5,16 +5,15 @@ import cn.edu.zzuli.wall.bean.User;
 import cn.edu.zzuli.wall.service.UserService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Api(tags = "用户相关文档")
@@ -95,6 +94,16 @@ public class UserController {
         if(userService.follow(fromId,followUId))
             return Msg.success().add("success","关注成功");
         return Msg.fail().add("error","关注失败" );
+    }
+
+    @ApiOperation(value = "用于点进用户界面，查找信息，其中包括用户的点赞数等和是否被关注",httpMethod = "GET")
+    @RequestMapping("/findUser")
+    public Msg findUserInfo(Integer uId, Integer sessionId){
+        Map<String,Object> info = userService.findUserInfo(uId,sessionId);
+        if(info != null){
+            return Msg.success().add("info",info);
+        }
+        return Msg.fail().add("error","查找失败");
     }
 
     @ApiIgnore

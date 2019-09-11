@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -23,7 +23,35 @@ public class UserService {
     private OSSClientUtil ossClientUtil;
 
     /**
-     * 获取当前用户点赞数
+     * 如果用户点进去查看用户信息时要获取的信息
+     * @param uId 查看的 id
+     * @param sessionId 登陆用户的id
+     * @return
+     */
+    public Map<String,Object> findUserInfo(Integer uId,Integer sessionId){
+        if(uId == null || sessionId == null)
+            return null;
+        //首先获取用户信息
+        Map<String ,Object> info = new HashMap<>();
+        try {
+            User user = userMapper.getUserByUId(uId);
+            user = removePasswd(user);
+            info.put("user", user);
+            //获取当前用户的关注数，点赞数等基本信息
+            info.put("initInfo", userMapper.initUserInfo(uId));
+            if(userMapper.jugeIsFollow(uId,sessionId) == 0){
+                info.put("isFollow",false);
+            }else {
+                info.put("isFollow",true);
+            }
+        }catch (DataAccessException d){
+            return null;
+        }
+        return info;
+    }
+
+    /**
+     * 获取当前用户点赞数,关注数，粉丝数
      * @param uId
      * @return
      */
@@ -125,13 +153,14 @@ public class UserService {
     }
 
     /**
-     * 移除 用户 中的密码字段信息
+     * 移除 用户 中的密码和用户字段信息
      * @param user
      * @return
      */
     public User removePasswd(User user){
         if(user != null){
             user.setPassword(null);
+            user.setUsername(null);
         }
         return user;
     }

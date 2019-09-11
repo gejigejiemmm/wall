@@ -17,6 +17,7 @@ public class Issue {
     private String content;
     private Integer like;
     private Integer share;
+    private Integer ccId;
 
     private User user;
 

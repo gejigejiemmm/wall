@@ -3,6 +3,7 @@ package cn.edu.zzuli.wall.mapper;
 import cn.edu.zzuli.wall.bean.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.HashMap;
 
@@ -25,4 +26,7 @@ public interface UserMapper {
 
     //获取用户总的点赞数,粉丝数，关注数
     public HashMap<Integer,Integer> initUserInfo(Integer uId);
+
+    @Select(" SELECT count( f.fId ) FROM followU f  WHERE fromId = #{fromId} AND followUId = #{followUId}")
+    public Integer jugeIsFollow(Integer fromId,Integer followUId);
 }

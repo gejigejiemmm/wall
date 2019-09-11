@@ -7,17 +7,12 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,8 +25,10 @@ public class IssueController {
 
     @ApiOperation(value = "获取所有的动态", httpMethod = "GET")
     @RequestMapping("/getAll")
-    public PageInfo getAllIssues(Integer p,@RequestParam(value = "uId",required = false) Integer uId){
-        return issueService.getAllIssues(p,uId);
+    public PageInfo getAllIssues(@RequestParam(value = "p",required = false,defaultValue = "1") Integer p,
+                                 @RequestParam(value = "uId",required = false) Integer uId,
+                                 @RequestParam(value = "ccId",required = false) Integer ccId){
+        return issueService.getAllIssues(p,uId,ccId);
     }
 
     @ApiOperation(value = "发布动态", httpMethod = "POST")

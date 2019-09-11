@@ -8,7 +8,8 @@
     private LocalDateTime date;
     private String content;
     private Integer like;
-    private Integer share;-->
+    private Integer share;
+    private Integer ccId;-->
 <mapper namespace="cn.edu.zzuli.wall.mapper.IssueMapper">
 
     <resultMap id="issue" type="cn.edu.zzuli.wall.bean.Issue">
@@ -19,6 +20,7 @@
         <result property="content" column="content"></result>
         <result property="like" column="like"></result>
         <result property="share" column="share"></result>
+        <result property="ccId" column="ccId"></result>
         <association property="user" >
             <id property="uId" column="uId"></id>
             <result property="sex" column="sex"></result>
@@ -34,6 +36,9 @@
         <where>
             <if test="uId != null">
                 i.fromId = #{uId}
+            </if>
+            <if test="ccId != null">
+                i.ccId = #{ccId}
             </if>
         </where>
         ORDER BY i.date DESC
@@ -53,8 +58,8 @@
                             @Param("fromId")Integer fromId,@Param("imgsUrl")String imgsUrl);-->
     <insert id="addIssue" useGeneratedKeys="true" keyProperty="isId" keyColumn="isId">
         INSERT INTO
-        issue(imgsUrl,fromId,date,content)
-        VALUES(#{imgsUrl},#{fromId},#{date},#{content})
+        issue(imgsUrl,fromId,date,content,ccId)
+        VALUES(#{imgsUrl},#{fromId},#{date},#{content},#{ccId})
     </insert>
 
 
